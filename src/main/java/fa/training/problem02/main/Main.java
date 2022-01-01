@@ -2,10 +2,13 @@ package fa.training.problem02.main;
 
 import fa.training.problem02.entities.Department;
 import fa.training.problem02.entities.Employee;
+import fa.training.problem02.entities.WorkingHistory;
 import fa.training.problem02.service.IDepartmentService;
 import fa.training.problem02.service.IEmployeeService;
+import fa.training.problem02.service.IWorkingHistorySerivce;
 import fa.training.problem02.service.impl.DepartmentServiceImpl;
 import fa.training.problem02.service.impl.EmployeeServiceImpl;
+import fa.training.problem02.service.impl.WorkingHistoryServiceImpl;
 
 import java.sql.Date;
 import java.util.Scanner;
@@ -71,6 +74,21 @@ public class Main {
                 System.err.println("Invalid option");
             }
         }
+    }
+
+    private static void addWorkingHistory(){
+        System.out.print("Enter department no: ");
+        int deptNo = Integer.parseInt(sc.nextLine());
+        System.out.print("Enter employee no: ");
+        int empNo = Integer.parseInt(sc.nextLine());
+        System.out.print("Enter from date (YYYY-MM-DD): ");
+        Date fromDate = Date.valueOf(sc.nextLine());
+        System.out.print("Enter to date (YYYY-MM-DD): ");
+        Date toDate = Date.valueOf(sc.nextLine());
+        WorkingHistory workingHistory = new WorkingHistory(deptNo, empNo, fromDate, toDate);
+
+        IWorkingHistorySerivce workingHistorySerivce = new WorkingHistoryServiceImpl();
+        workingHistorySerivce.create(workingHistory);
     }
 
     private static void addEmployee(){
