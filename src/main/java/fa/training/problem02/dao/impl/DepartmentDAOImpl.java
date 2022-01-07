@@ -20,7 +20,11 @@ public class DepartmentDAOImpl implements DepartmentDAO<Department, Integer> {
             preparedStatement.setInt(1, department.getDeptNo());
             preparedStatement.setString(2, department.getDeptName());
             preparedStatement.setString( 3, department.getDescription());
-            preparedStatement.executeUpdate();
+            if(preparedStatement.executeUpdate() == 1){
+                System.out.println("Added successfully.");
+            }else {
+                System.err.println("Added Fail!");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();

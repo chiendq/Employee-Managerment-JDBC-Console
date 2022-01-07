@@ -9,6 +9,9 @@ import fa.training.problem02.service.WorkingHistorySerivce;
 import fa.training.problem02.service.impl.DepartmentServiceImpl;
 import fa.training.problem02.service.impl.EmployeeServiceImpl;
 import fa.training.problem02.service.impl.WorkingHistoryServiceImpl;
+import fa.training.utils.validator.DepartmentValidator;
+import fa.training.utils.validator.EmployeeValidator;
+import fa.training.utils.validator.WorkingHistoryValidator;
 
 import java.sql.Date;
 import java.util.List;
@@ -101,6 +104,10 @@ public class Main {
         int deptNo = Integer.parseInt(sc.nextLine());
         System.out.print("Enter employee no: ");
         int empNo = Integer.parseInt(sc.nextLine());
+        if(WorkingHistoryValidator.isExist(deptNo, empNo)){
+            System.out.println("Working history is already exist!");
+            return;
+        }
         System.out.print("Enter from date (YYYY-MM-DD): ");
         Date fromDate = Date.valueOf(sc.nextLine());
         System.out.print("Enter to date (YYYY-MM-DD): ");
@@ -114,6 +121,10 @@ public class Main {
     private static void addEmployee(){
         System.out.print("Enter employee no: ");
         int empNo = Integer.parseInt(sc.nextLine());
+        if(EmployeeValidator.isExist(empNo)){
+            System.out.println("Employee ID is already exist!");
+            return;
+        }
         System.out.print("Enter birth date (YYYY-MM-DD) : ");
         String birthDate = sc.nextLine();
         System.out.print("Enter first name: ");
@@ -133,6 +144,10 @@ public class Main {
     private static void updateEmployee(){
         System.out.print("Enter employee no: ");
         int empNo = Integer.parseInt(sc.nextLine());
+        if(!EmployeeValidator.isExist(empNo)){
+            System.out.println("Employee ID is not exist!");
+            return;
+        }
         System.out.print("Enter birth date (YYYY-MM-DD) : ");
         String birthDate = sc.nextLine();
         System.out.print("Enter first name: ");
@@ -149,9 +164,13 @@ public class Main {
     }
     private static void findByID() {
         System.out.print("Enter employee no: ");
-        int emp_no = Integer.parseInt(sc.nextLine());
+        int empNo = Integer.parseInt(sc.nextLine());
+        if(!EmployeeValidator.isExist(empNo)){
+            System.out.println("Employee ID is not exist!");
+            return;
+        }
         EmployeeService employeeService = new EmployeeServiceImpl();
-        Employee employee =  employeeService.findById(emp_no);
+        Employee employee =  employeeService.findById(empNo);
         System.out.println(employee.toString());
     }
     private static void departmentManagement(){
@@ -178,9 +197,13 @@ public class Main {
     private static void addDepartment(){
         System.out.print("Enter department no: ");
         int deptNo = Integer.parseInt(sc.nextLine());
+        if(DepartmentValidator.isExist(deptNo)){
+            System.out.println("Department ID is already existed!");
+            return;
+        }
         System.out.print("Enter department name: ");
         String deptName =  sc.nextLine();
-        System.out.print("Enter from date: ");
+        System.out.print("Enter department description: ");
         String description = sc.nextLine();
         Department department = new Department(deptNo, deptName, description);
         DepartmentService departmentService = new DepartmentServiceImpl();
