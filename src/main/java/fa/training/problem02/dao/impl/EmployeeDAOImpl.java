@@ -5,20 +5,29 @@ import fa.training.problem02.entities.Employee;
 import fa.training.utils.JDBCConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
-
-
     @Override
     public List<Employee> findAll() {
         String SQLFindAll = "SELECT * FROM employee";
-
         Connection connection = JDBCConnection.getConnection();
-        List<Employee> employeeList = null;
+        List<Employee> employeeList = new ArrayList<>();
         try {
             PreparedStatement pst = connection.prepareStatement(SQLFindAll);
-             employeeList = (List<Employee>) pst.getResultSet();
+            ResultSet resultSet = pst.executeQuery();
+
+            while (resultSet.next()){
+                Employee e = new Employee();
+                e.setNo(resultSet.getInt("emp_no"));
+                e.setBirthDate(resultSet.getDate("birth_date"));
+                e.setFirstName(resultSet.getString("first_name"));
+                e.setLastName(resultSet.getString("last_name"));
+                e.setGender(resultSet.getString("gender"));
+                e.setHireDate(resultSet.getDate("hire_date"));
+                employeeList.add(e);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }finally {
@@ -27,11 +36,9 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
         return employeeList;
     }
 
-
     @Override
     public List<Employee> findByWorkTime(Date fromDate, Date toDate) {
         Connection connection = JDBCConnection.getConnection();
-
         //eg : SELECT * FROM demo WHERE fromDate< "2000-01-02" AND toDate > "2000-01-02";
         String SQLFindByTime = "SELECT emp.emp_no, emp.birth_date, emp.first_name, emp.last_name, emp.gender, emp.hire_date, wh.from_date, wh.to_date FROM (working_history as wh INNER JOIN employee as emp ON wh.emp_no = emp.emp_no) where wh.from_date = ? and wh.to_date =?";
         List<Employee> employeeListByWorkTime = null;
@@ -39,7 +46,6 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
             PreparedStatement pst = connection.prepareStatement(SQLFindByTime);
             pst.setDate(1, fromDate);
             pst.setDate(2, toDate);
-
             employeeListByWorkTime = (List<Employee>) pst.getResultSet();
             if(employeeListByWorkTime != null) return  employeeListByWorkTime;
         } catch (SQLException e) {
@@ -112,16 +118,14 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
     }
 
     @Override
-    public void delete(Employee employee) {
-        int emp_no = employee.getNo();
-
+    public void deleteById(int empNo) {
         String SQLDelete = "DELETE FROM employee WHERE emp_no = ?";
 
         Connection connection = JDBCConnection.getConnection();
         try {
             PreparedStatement pst = connection.prepareStatement(SQLDelete);
-            pst.setInt(1, emp_no);
-            if(pst.execute()){
+            pst.setInt(1, empNo);
+            if(pst.executeUpdate() == 1){
                 System.out.println("Delete successfully.");
             }else{
                 System.err.println("Delete fail!");
@@ -132,6 +136,7 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
             JDBCConnection.closeConnection();
         }
     }
+
 
     @Override
     public void save(Employee employee) {

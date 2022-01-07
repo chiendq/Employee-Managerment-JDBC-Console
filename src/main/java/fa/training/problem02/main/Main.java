@@ -49,11 +49,15 @@ public class Main {
                             3. Find an employee by emp_no
                             4. Add the working history
                             5. Find all the employees by working period of time
-                            6. RETURN""");
+                            6. List all employee
+                            7. Delete employee by Id
+                            0. RETURN""");
             try {
                 System.out.print("Your option:");
                 int choice = Integer.parseInt(sc.nextLine());
                 switch (choice){
+                    case 0:
+                        return;
                     case 1:
                         addEmployee();
                         break;
@@ -70,7 +74,11 @@ public class Main {
                         findByWorkingTime();
                         break;
                     case 6:
-                        return;
+                        listAllEmployee();
+                        break;
+                    case 7:
+                        deleteEmployeeById();
+                        break;
                     default:
                         System.err.println("Invalid option at default case EmployeeManager");
                 }
@@ -78,6 +86,28 @@ public class Main {
 //                System.err.println("Invalid option  at Exception EmployeeManager");
                 e.printStackTrace();
             }
+        }
+    }
+
+    private static void deleteEmployeeById(){
+        System.out.print("Enter employee no: ");
+        int empNo = Integer.parseInt(sc.nextLine());
+        if(!EmployeeValidator.isExist(empNo)){
+            System.out.println("Employee ID " + empNo + " is not exist!");
+            return;
+        }
+        EmployeeService employeeService = new EmployeeServiceImpl();
+        employeeService.deleteById(empNo);
+        System.out.println("Deleted successfully.");
+    }
+
+    private static void listAllEmployee(){
+        EmployeeService employeeService = new EmployeeServiceImpl();
+        List<Employee> employeeList = employeeService.finAll();
+        if( employeeList != null  ){
+            employeeList.forEach(e -> System.out.println(e.toString()));
+        }else {
+            System.out.println("(empty)");
         }
     }
 

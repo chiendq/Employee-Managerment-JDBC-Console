@@ -28,8 +28,20 @@ public class EmployeeServiceImpl implements EmployeeService<Employee> {
     }
 
     @Override
+    public List<Employee> finAll() {
+        EmployeeDAO employeeDAO = new EmployeeDAOImpl();
+        return employeeDAO.findAll();
+    }
+
+    @Override
     public List<Employee> findByWorkTime(Date fromDate, Date toDate) {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
         return  employeeDAO.findByWorkTime(fromDate, toDate);
+    }
+
+    @Override
+    public void deleteById(int empNo) {
+        EmployeeDAO employeeDAO = new EmployeeDAOImpl();
+        employeeDAO.deleteById(empNo);
     }
 }

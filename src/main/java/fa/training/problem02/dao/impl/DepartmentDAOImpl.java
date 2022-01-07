@@ -14,7 +14,6 @@ public class DepartmentDAOImpl implements DepartmentDAO<Department, Integer> {
     public void create(Department department) {
         String SQLCreate = "INSERT INTO department VALUES(?,?,?)";
         Connection connection = JDBCConnection.getConnection();
-
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SQLCreate);
             preparedStatement.setInt(1, department.getDeptNo());
@@ -25,7 +24,6 @@ public class DepartmentDAOImpl implements DepartmentDAO<Department, Integer> {
             }else {
                 System.err.println("Added Fail!");
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }finally {
