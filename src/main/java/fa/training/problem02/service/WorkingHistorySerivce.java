@@ -1,5 +1,5 @@
 package fa.training.problem02.service;
 
-public interface IWorkingHistorySerivce<T>{
+public interface WorkingHistorySerivce<T>{
     void create(T workingHistory);
 }

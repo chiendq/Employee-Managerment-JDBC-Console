@@ -10,6 +10,9 @@ public class Employee {
     private String gender;
     private Date hireDate;
 
+    public  Employee(){
+
+    }
     public Employee(int no, Date birthDate, String firstName, String lastName, String gender, Date hireDate) {
         this.no = no;
         this.birthDate = birthDate;
@@ -65,5 +68,16 @@ public class Employee {
 
     public void setHireDate(Date hireDate) {
         this.hireDate = hireDate;
+    }
+
+    @Override
+    public String toString() {
+        return
+                "Employee ID: " + no +
+                ", Date of birth=" + birthDate +
+                ", First Name='" + firstName + '\'' +
+                ", Last Name='" + lastName + '\'' +
+                ", Gender='" + gender + '\'' +
+                ", Hire Date=" + hireDate;
     }
 }

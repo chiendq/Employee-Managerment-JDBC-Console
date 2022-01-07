@@ -3,12 +3,12 @@ package fa.training.problem02.service.impl;
 import fa.training.problem02.dao.EmployeeDAO;
 import fa.training.problem02.dao.impl.EmployeeDAOImpl;
 import fa.training.problem02.entities.Employee;
-import fa.training.problem02.service.IEmployeeService;
+import fa.training.problem02.service.EmployeeService;
 
 import java.sql.Date;
 import java.util.List;
 
-public class EmployeeServiceImpl implements IEmployeeService<Employee> {
+public class EmployeeServiceImpl implements EmployeeService<Employee> {
     @Override
     public void save(Employee employee) {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
@@ -22,7 +22,7 @@ public class EmployeeServiceImpl implements IEmployeeService<Employee> {
     }
 
     @Override
-    public Employee findById(Employee empNo) {
+    public Employee findById(int empNo) {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
         return  employeeDAO.findById(empNo);
     }

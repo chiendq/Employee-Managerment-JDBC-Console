@@ -28,7 +28,7 @@ public class WorkingHistoryDAOImpl implements WorkingHistoryDAO<WorkingHistory, 
             preparedStatement.setDate( 3, from_date);
             preparedStatement.setDate( 4, to_date);
 
-            if(preparedStatement.execute()){
+            if(preparedStatement.executeUpdate() == 1 ){
                 System.out.println("Create successfully.");
             }else{
                 System.err.println("Create fail!");

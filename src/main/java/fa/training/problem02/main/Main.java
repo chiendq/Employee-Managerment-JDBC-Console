@@ -3,14 +3,15 @@ package fa.training.problem02.main;
 import fa.training.problem02.entities.Department;
 import fa.training.problem02.entities.Employee;
 import fa.training.problem02.entities.WorkingHistory;
-import fa.training.problem02.service.IDepartmentService;
-import fa.training.problem02.service.IEmployeeService;
-import fa.training.problem02.service.IWorkingHistorySerivce;
+import fa.training.problem02.service.DepartmentService;
+import fa.training.problem02.service.EmployeeService;
+import fa.training.problem02.service.WorkingHistorySerivce;
 import fa.training.problem02.service.impl.DepartmentServiceImpl;
 import fa.training.problem02.service.impl.EmployeeServiceImpl;
 import fa.training.problem02.service.impl.WorkingHistoryServiceImpl;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -60,19 +61,38 @@ public class Main {
                         findByID();
                         break;
                     case 4:
-
+                        addWorkingHistory();
                         break;
                     case 5:
-
+                        findByWorkingTime();
                         break;
                     case 6:
                         return;
                     default:
-                        System.err.println("Invalid option");
+                        System.err.println("Invalid option at default case EmployeeManager");
                 }
             }catch (Exception e){
-                System.err.println("Invalid option");
+//                System.err.println("Invalid option  at Exception EmployeeManager");
+                e.printStackTrace();
             }
+        }
+    }
+
+    private  static void findByWorkingTime(){
+        System.out.print("Enter from date (YYYY-MM-DD): ");
+        Date fromDate = Date.valueOf(sc.nextLine());
+        System.out.print("Enter to date (YYYY-MM-DD): ");
+        Date toDate = Date.valueOf(sc.nextLine());
+
+        EmployeeService employeeService = new EmployeeServiceImpl();
+
+        List<Employee> employeeList = employeeService.findByWorkTime(fromDate, toDate);
+        if(employeeList != null){
+            employeeList.forEach(x->{
+                System.out.println(x.toString());
+            });
+        }else {
+            System.out.println("(Empty)");
         }
     }
 
@@ -87,7 +107,7 @@ public class Main {
         Date toDate = Date.valueOf(sc.nextLine());
         WorkingHistory workingHistory = new WorkingHistory(deptNo, empNo, fromDate, toDate);
 
-        IWorkingHistorySerivce workingHistorySerivce = new WorkingHistoryServiceImpl();
+        WorkingHistorySerivce workingHistorySerivce = new WorkingHistoryServiceImpl();
         workingHistorySerivce.create(workingHistory);
     }
 
@@ -105,7 +125,7 @@ public class Main {
         System.out.print("Enter hire date (YYYY-MM-DD) : ");
         String hireDate = sc.nextLine();
 
-        IEmployeeService employeeService = new EmployeeServiceImpl();
+        EmployeeService employeeService = new EmployeeServiceImpl();
         Employee employee = new Employee(empNo, Date.valueOf(birthDate), firstName, lastName,gender, Date.valueOf(hireDate));
         employeeService.save(employee);
     }
@@ -123,15 +143,16 @@ public class Main {
         String gender = sc.nextLine();
         System.out.print("Enter hire date (YYYY-MM-DD) : ");
         String hireDate = sc.nextLine();
-        IEmployeeService employeeService = new EmployeeServiceImpl();
+        EmployeeService employeeService = new EmployeeServiceImpl();
         Employee employeeUpdate = new Employee(empNo, Date.valueOf(birthDate), firstName, lastName,gender, Date.valueOf(hireDate));
         employeeService.update(employeeUpdate);
     }
     private static void findByID() {
         System.out.print("Enter employee no: ");
         int emp_no = Integer.parseInt(sc.nextLine());
-        IEmployeeService employeeService = new EmployeeServiceImpl();
-        Employee employee = (Employee) employeeService.findById(emp_no);
+        EmployeeService employeeService = new EmployeeServiceImpl();
+        Employee employee =  employeeService.findById(emp_no);
+        System.out.println(employee.toString());
     }
     private static void departmentManagement(){
         while (true){
@@ -162,20 +183,20 @@ public class Main {
         System.out.print("Enter from date: ");
         String description = sc.nextLine();
         Department department = new Department(deptNo, deptName, description);
-        IDepartmentService departmentService = new DepartmentServiceImpl();
+        DepartmentService departmentService = new DepartmentServiceImpl();
         departmentService.save(department);
     }
 
     private static void menu(){
         System.out.println(
             "1. Employee management\n" +
-            "\ta. Add a new Employee\n" +
-            "\tb. Update a specific Employee\n" +
-            "\tc. Find an employee by emp_no\n" +
-            "\td. Add the working history\n" +
-            "\te. Find all the employees by working period of time\n" +
+//            "\ta. Add a new Employee\n" +
+//            "\tb. Update a specific Employee\n" +
+//            "\tc. Find an employee by emp_no\n" +
+//            "\td. Add the working history\n" +
+//            "\te. Find all the employees by working period of time\n" +
             "2. Department management\n" +
-            "\ta. Add a new department\n" +
+//            "\ta. Add a new department\n" +
             "3. Close program"
         );
     }

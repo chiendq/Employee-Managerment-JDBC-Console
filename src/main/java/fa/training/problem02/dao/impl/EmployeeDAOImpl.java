@@ -21,18 +21,19 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
              employeeList = (List<Employee>) pst.getResultSet();
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            JDBCConnection.closeConnection();
         }
-        JDBCConnection.closeConnection();
         return employeeList;
     }
 
 
     @Override
     public List<Employee> findByWorkTime(Date fromDate, Date toDate) {
-        //eg : SELECT * FROM demo WHERE fromDate< "2000-01-02" AND toDate > "2000-01-02";
-        String SQLFindByTime = "SELECT * FROM employee WHERE fromDate < ? AND toDate > ?";
-
         Connection connection = JDBCConnection.getConnection();
+
+        //eg : SELECT * FROM demo WHERE fromDate< "2000-01-02" AND toDate > "2000-01-02";
+        String SQLFindByTime = "SELECT emp.emp_no, emp.birth_date, emp.first_name, emp.last_name, emp.gender, emp.hire_date, wh.from_date, wh.to_date FROM (working_history as wh INNER JOIN employee as emp ON wh.emp_no = emp.emp_no) where wh.from_date = ? and wh.to_date =?";
         List<Employee> employeeListByWorkTime = null;
         try {
             PreparedStatement pst = connection.prepareStatement(SQLFindByTime);
@@ -40,21 +41,21 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
             pst.setDate(2, toDate);
 
             employeeListByWorkTime = (List<Employee>) pst.getResultSet();
-
+            if(employeeListByWorkTime != null) return  employeeListByWorkTime;
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            JDBCConnection.closeConnection();
         }
-
-        JDBCConnection.closeConnection();
         return employeeListByWorkTime;
     }
 
     @Override
     public Employee findById(Integer emp_no) {
-        String SQLFindById = "SELECT * FROM employee WHERE id = ?";
+        String SQLFindById = "SELECT * FROM employee WHERE emp_no = ?";
 
         Connection connection = JDBCConnection.getConnection();
-        Employee employeeById = null;
+        Employee employeeById = new Employee();
         try {
             PreparedStatement pst = connection.prepareStatement(SQLFindById);
             pst.setInt(1, emp_no);
@@ -67,13 +68,14 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
                 employeeById.setLastName(resultSet.getString("last_name"));
                 employeeById.setGender(resultSet.getString("gender"));
                 employeeById.setHireDate(resultSet.getDate("hire_date"));
+                return employeeById;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            JDBCConnection.closeConnection();
         }
-
-        JDBCConnection.closeConnection();
-        return employeeById;
+        return null;
     }
 
     @Override
@@ -90,22 +92,23 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
         Connection connection = JDBCConnection.getConnection();
         try {
             PreparedStatement pst = connection.prepareStatement(SQLUpdate);
-            pst.setDate(2, birth_date);
-            pst.setString(3, first_name);
-            pst.setString(4, last_name);
-            pst.setString(5, gender);
-            pst.setDate(6, hire_date);
-            pst.setInt(1, emp_no);
+            pst.setDate(1, birth_date);
+            pst.setString(2, first_name);
+            pst.setString(3, last_name);
+            pst.setString(4, gender);
+            pst.setDate(5, hire_date);
+            pst.setInt(6, emp_no);
 
-            if(pst.execute()){
+            if(pst.executeUpdate() == 1){
                 System.out.println("Update successfully.");
             }else{
                 System.err.println("Update fail!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            JDBCConnection.closeConnection();
         }
-        JDBCConnection.closeConnection();
     }
 
     @Override
@@ -125,8 +128,9 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            JDBCConnection.closeConnection();
         }
-        JDBCConnection.closeConnection();
     }
 
     @Override
@@ -150,14 +154,15 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
             pst.setString(5, gender);
             pst.setDate(6, hire_date);
 
-            if(pst.execute()){
+            if(pst.executeUpdate() ==1){
                 System.out.println("Create successfully.");
             }else{
                 System.err.println("Create fail!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            JDBCConnection.closeConnection();
         }
-        JDBCConnection.closeConnection();
     }
 }

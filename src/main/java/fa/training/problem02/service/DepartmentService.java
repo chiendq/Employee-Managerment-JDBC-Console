@@ -1,5 +1,5 @@
 package fa.training.problem02.service;
 
-public interface IDepartmentService<T>{
+public interface DepartmentService<T>{
     void save(T department);
 }
