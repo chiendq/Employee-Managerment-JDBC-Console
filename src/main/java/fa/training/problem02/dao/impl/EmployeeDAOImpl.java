@@ -9,10 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
+    Connection connection = null;
     @Override
     public List<Employee> findAll() {
         String SQLFindAll = "SELECT * FROM employee";
-        Connection connection = JDBCConnection.getConnection();
+        connection = JDBCConnection.getConnection();
         List<Employee> employeeList = new ArrayList<>();
         try {
             PreparedStatement pst = connection.prepareStatement(SQLFindAll);
@@ -38,7 +39,7 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
 
     @Override
     public List<Employee> findByWorkTime(Date fromDate, Date toDate) {
-        Connection connection = JDBCConnection.getConnection();
+        connection = JDBCConnection.getConnection();
         //eg : SELECT * FROM demo WHERE fromDate< "2000-01-02" AND toDate > "2000-01-02";
         String SQLFindByTime = "SELECT emp.emp_no, emp.birth_date, emp.first_name, emp.last_name, emp.gender, emp.hire_date, wh.from_date, wh.to_date FROM (working_history as wh INNER JOIN employee as emp ON wh.emp_no = emp.emp_no) where wh.from_date = ? and wh.to_date =?";
         List<Employee> employeeListByWorkTime = null;
@@ -60,7 +61,7 @@ public class EmployeeDAOImpl implements EmployeeDAO<Employee, Integer> {
     public Employee findById(Integer emp_no) {
         String SQLFindById = "SELECT * FROM employee WHERE emp_no = ?";
 
-        Connection connection = JDBCConnection.getConnection();
+        connection = JDBCConnection.getConnection();
         Employee employeeById = new Employee();
         try {
             PreparedStatement pst = connection.prepareStatement(SQLFindById);

@@ -35,7 +35,7 @@ public class Main {
                     default -> System.out.println("Invalid option!");
                 }
             }catch (NumberFormatException e){
-                System.out.println("Invalid option!");
+                System.err.println("Invalid option!");
             }
         }
     }
@@ -80,24 +80,24 @@ public class Main {
                         deleteEmployeeById();
                         break;
                     default:
-                        System.err.println("Invalid option at default case EmployeeManager");
+                        System.err.println("Invalid option");
                 }
             }catch (Exception e){
-//                System.err.println("Invalid option  at Exception EmployeeManager");
-                e.printStackTrace();
+                System.err.println("Invalid option");
+//                e.printStackTrace();
             }
         }
     }
 
-    private static void deleteEmployeeById(){
+    private static void deleteEmployeeById()   {
         System.out.print("Enter employee no: ");
-        int empNo = Integer.parseInt(sc.nextLine());
-        if(!EmployeeValidator.isExist(empNo)){
+        String empNo = sc.nextLine();
+        if(!EmployeeValidator.isExist(Integer.valueOf(empNo))){
             System.out.println("Employee ID " + empNo + " is not exist!");
             return;
         }
         EmployeeService employeeService = new EmployeeServiceImpl();
-        employeeService.deleteById(empNo);
+        employeeService.deleteById(Integer.valueOf(empNo));
         System.out.println("Deleted successfully.");
     }
 

@@ -27,4 +27,13 @@ public class EmployeeValidator {
         return false;
     }
 
+    public static boolean empNoValidate(String empNo){
+        try{
+            Integer.valueOf(empNo);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
+
 }
